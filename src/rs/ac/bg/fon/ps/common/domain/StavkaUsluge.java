@@ -79,18 +79,32 @@ public class StavkaUsluge implements GenericEntity {
     }
 
     @Override
+    public String getAliases() {
+        return "su";
+    }
+    @Override
+    public String getSelectValues() {
+        return "su.*, m.naziv AS materijal_naziv, m.cena AS materijal_cena";
+    }
+
+    @Override
+    public String getJoinClause() {
+        return "JOIN materijal m ON su.id_materijal = m.id_materijal";
+    }
+
+    @Override
     public String getColumnNamesForInsert() {
         return "id_usluga, rb, kolicina, cena, iznos, id_materijal";
     }
 
     @Override
     public String getInsertValues() {
-        return usluga.getUslugaId() + ", " +
-               rb + ", " +
-               kolicina + ", " +
-               cena + ", " +
-               iznos + ", " +
-               materijal.getMaterijalId();
+        return usluga.getUslugaId() + ", "
+                + rb + ", "
+                + kolicina + ", "
+                + cena + ", "
+                + iznos + ", "
+                + materijal.getMaterijalId();
     }
 
     @Override
@@ -137,15 +151,19 @@ public class StavkaUsluge implements GenericEntity {
 
     @Override
     public String getUpdateSetClause() {
-        return "kolicina=" + kolicina +
-               ", cena=" + cena +
-               ", iznos=" + iznos +
-               ", id_materijal=" + materijal.getMaterijalId();
+        return "kolicina=" + kolicina
+                + ", cena=" + cena
+                + ", iznos=" + iznos
+                + ", id_materijal=" + materijal.getMaterijalId();
     }
-    
+
     @Override
     public String getWhereCondition() {
-        return "id_usluga = " + usluga.getUslugaId() + " AND rb = " + rb;
+        if (rb > 0) {
+            return "id_usluga = " + usluga.getUslugaId() + " AND rb = " + rb;
+        } else {
+            return "id_usluga = " + usluga.getUslugaId();
+        }
     }
 
     @Override

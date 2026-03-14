@@ -49,6 +49,20 @@ public class Materijal implements GenericEntity {
     }
 
     @Override
+    public String getAliases() {
+        return "";
+    }
+
+    @Override
+    public String getJoinClause() {
+        return "";
+    }
+
+    @Override
+    public String getSelectValues() {
+        return "*";
+    }
+    @Override
     public String getColumnNamesForInsert() {
         return "naziv, cena";
     }

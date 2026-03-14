@@ -39,6 +39,21 @@ public class Kvalifikacija implements GenericEntity {
     }
 
     @Override
+    public String getAliases() {
+        return "";
+    }
+
+    @Override
+    public String getJoinClause() {
+        return "";
+    }
+    
+    @Override
+    public String getSelectValues() {
+        return "*";
+    }
+
+    @Override
     public String getColumnNamesForInsert() {
         return "naziv";
     }
@@ -87,7 +102,7 @@ public class Kvalifikacija implements GenericEntity {
     public String toString() {
         return naziv;
     }
-    
+
     @Override
     public String getWhereCondition() {
         return "id_kvalifikacija = " + kvalifikacijaId;

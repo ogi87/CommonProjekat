@@ -23,7 +23,7 @@ public class Usluga implements GenericEntity {
     }
 
     public Usluga(Long uslugaId, String naziv, double ukupanIznos, double popust,
-                  double ukupanIznosSaPopustom, Zubar zubar, Klijent klijent) {
+            double ukupanIznosSaPopustom, Zubar zubar, Klijent klijent) {
         this.uslugaId = uslugaId;
         this.naziv = naziv;
         this.ukupanIznos = ukupanIznos;
@@ -34,8 +34,6 @@ public class Usluga implements GenericEntity {
         this.stavke = new ArrayList<>();
     }
 
-    
-    
     public Long getUslugaId() {
         return uslugaId;
     }
@@ -75,7 +73,7 @@ public class Usluga implements GenericEntity {
     public void setUkupanIznosSaPopustom(double ukupanIznosSaPopustom) {
         this.ukupanIznosSaPopustom = ukupanIznosSaPopustom;
     }
-    
+
     public Materijal getMaterijalZaPretragu() {
         return materijalZaPretragu;
     }
@@ -114,18 +112,37 @@ public class Usluga implements GenericEntity {
     }
 
     @Override
+    public String getSelectValues() {
+        return "u.*, z.ime AS zubar_ime, z.prezime AS zubar_prezime, k.ime AS klijent_ime, k.prezime AS klijent_prezime";
+    }
+
+    @Override
+    public String getAliases() {
+        return "u";
+    }
+
+    @Override
+    public String getJoinClause() {
+        return "JOIN zubar z ON u.id_zubar = z.id_zubar JOIN klijent k ON u.id_klijent = k.id_klijent";
+    }
+
+    @Override
     public String getColumnNamesForInsert() {
         return "naziv, ukupan_iznos, popust, ukupan_iznos_sa_popustom, id_zubar, id_klijent";
     }
 
     @Override
     public String getInsertValues() {
-        return "'" + naziv + "', " +
-                ukupanIznos + ", " +
-                popust + ", " +
-                ukupanIznosSaPopustom + ", " +
-                zubar.getZubarId() + ", " +
-                klijent.getKlijentId();
+        String zId = (zubar != null && zubar.getZubarId() != null) ? String.valueOf(zubar.getZubarId()) : "NULL";
+        String kId = (klijent != null && klijent.getKlijentId() != null) ? String.valueOf(klijent.getKlijentId()) : "NULL";
+        String n = (naziv != null) ? naziv : "Nova Usluga";
+
+        return "'" + n + "', "
+                + ukupanIznos + ", "
+                + popust + ", "
+                + ukupanIznosSaPopustom + ", "
+                + zId + ", "
+                + kId;
     }
 
     @Override
@@ -148,8 +165,8 @@ public class Usluga implements GenericEntity {
 
             // Vraceno na tvoje originalne aliase koji se slazu sa RepositoryDBGeneric
             Long zubarId = rs.getLong("id_zubar");
-            String zubarIme = rs.getString("zubar_ime"); 
-            String zubarPrezime = rs.getString("zubar_prezime"); 
+            String zubarIme = rs.getString("zubar_ime");
+            String zubarPrezime = rs.getString("zubar_prezime");
 
             Long klijentId = rs.getLong("id_klijent");
             String klijentIme = rs.getString("klijent_ime");
@@ -185,14 +202,14 @@ public class Usluga implements GenericEntity {
 
     @Override
     public String getUpdateSetClause() {
-        return "naziv='" + naziv +
-                "', ukupan_iznos=" + ukupanIznos +
-                ", popust=" + popust +
-                ", ukupan_iznos_sa_popustom=" + ukupanIznosSaPopustom +
-                ", id_zubar=" + zubar.getZubarId() +
-                ", id_klijent=" + klijent.getKlijentId();
+        return "naziv='" + naziv
+                + "', ukupan_iznos=" + ukupanIznos
+                + ", popust=" + popust
+                + ", ukupan_iznos_sa_popustom=" + ukupanIznosSaPopustom
+                + ", id_zubar=" + zubar.getZubarId()
+                + ", id_klijent=" + klijent.getKlijentId();
     }
-    
+
     // --- OVO JE KLJUČNO ZA PRETRAGU (SK2) ---
     public String getWhereCondition() {
         // Ako se trazi konkretna usluga (npr kod ucitavanja stavki)
@@ -220,7 +237,7 @@ public class Usluga implements GenericEntity {
         // Uslov 4: Materijal
         if (materijalZaPretragu != null && materijalZaPretragu.getMaterijalId() != null) {
             sb.append(" AND u.id_usluga IN (SELECT id_usluga FROM stavka_usluge WHERE id_materijal = ")
-              .append(materijalZaPretragu.getMaterijalId()).append(")");
+                    .append(materijalZaPretragu.getMaterijalId()).append(")");
         }
 
         return sb.toString();

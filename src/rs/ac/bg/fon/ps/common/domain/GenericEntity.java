@@ -21,7 +21,12 @@ public interface GenericEntity extends Serializable {
     Long getPrimaryKeyValue();
 
     String getUpdateSetClause();
-    
+
     String getWhereCondition();
-    
+
+    String getAliases(); // За алијасе (нпр. "k")
+
+    String getJoinClause(); // За спајање табела (нпр. "JOIN kategorija_klijenta kk ON ...")
+
+    String getSelectValues();
 }

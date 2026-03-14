@@ -67,6 +67,21 @@ public class Zubar implements GenericEntity {
     public String getTableName() {
         return "zubar";
     }
+    
+    @Override
+    public String getAliases() {
+        return "";
+    }
+
+    @Override
+    public String getJoinClause() {
+        return "";
+    }
+    
+    @Override
+    public String getSelectValues() {
+        return "*";
+    }
 
     @Override
     public String getColumnNamesForInsert() {
