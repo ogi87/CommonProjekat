@@ -87,4 +87,5 @@ public class Kvalifikacija implements GenericEntity {
     public String toString() {
         return naziv;
     }
+
 }

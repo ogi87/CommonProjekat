@@ -11,6 +11,7 @@ public class Usluga implements GenericEntity {
     private double ukupanIznos;
     private double popust;
     private double ukupanIznosSaPopustom;
+    private Materijal materijalZaPretragu;
 
     private Zubar zubar;
     private Klijent klijent;
@@ -33,6 +34,8 @@ public class Usluga implements GenericEntity {
         this.stavke = new ArrayList<>();
     }
 
+    
+    
     public Long getUslugaId() {
         return uslugaId;
     }
@@ -71,6 +74,14 @@ public class Usluga implements GenericEntity {
 
     public void setUkupanIznosSaPopustom(double ukupanIznosSaPopustom) {
         this.ukupanIznosSaPopustom = ukupanIznosSaPopustom;
+    }
+    
+    public Materijal getMaterijalZaPretragu() {
+        return materijalZaPretragu;
+    }
+
+    public void setMaterijalZaPretragu(Materijal materijalZaPretragu) {
+        this.materijalZaPretragu = materijalZaPretragu;
     }
 
     public Zubar getZubar() {
@@ -130,14 +141,15 @@ public class Usluga implements GenericEntity {
         while (rs.next()) {
 
             Long id = rs.getLong("id_usluga");
-            String naziv = rs.getString("naziv");
+            String nazivIzBaze = rs.getString("naziv");
             double ukupan = rs.getDouble("ukupan_iznos");
-            double popust = rs.getDouble("popust");
+            double popustBaza = rs.getDouble("popust");
             double ukupanSaPopustom = rs.getDouble("ukupan_iznos_sa_popustom");
 
+            // Vraceno na tvoje originalne aliase koji se slazu sa RepositoryDBGeneric
             Long zubarId = rs.getLong("id_zubar");
-            String zubarIme = rs.getString("zubar_ime");
-            String zubarPrezime = rs.getString("zubar_prezime");
+            String zubarIme = rs.getString("zubar_ime"); 
+            String zubarPrezime = rs.getString("zubar_prezime"); 
 
             Long klijentId = rs.getLong("id_klijent");
             String klijentIme = rs.getString("klijent_ime");
@@ -153,7 +165,7 @@ public class Usluga implements GenericEntity {
             k.setIme(klijentIme);
             k.setPrezime(klijentPrezime);
 
-            Usluga u = new Usluga(id, naziv, ukupan, popust, ukupanSaPopustom, z, k);
+            Usluga u = new Usluga(id, nazivIzBaze, ukupan, popustBaza, ukupanSaPopustom, z, k);
 
             lista.add(u);
         }
@@ -180,9 +192,38 @@ public class Usluga implements GenericEntity {
                 ", id_zubar=" + zubar.getZubarId() +
                 ", id_klijent=" + klijent.getKlijentId();
     }
+    
+    // --- OVO JE KLJUČNO ZA PRETRAGU (SK2) ---
+    public String getWhereCondition() {
+        // Ako se trazi konkretna usluga (npr kod ucitavanja stavki)
+        if (uslugaId != null && uslugaId > 0) {
+            return "u.id_usluga = " + uslugaId;
+        }
 
-    @Override
-    public String toString() {
-        return naziv;
+        StringBuilder sb = new StringBuilder("1=1 ");
+
+        // Uslov 1: Naziv usluge
+        if (naziv != null && !naziv.trim().isEmpty()) {
+            sb.append(" AND u.naziv LIKE '%").append(naziv).append("%'");
+        }
+
+        // Uslov 2: Zubar
+        if (zubar != null && zubar.getZubarId() != null && zubar.getZubarId() > 0) {
+            sb.append(" AND u.id_zubar = ").append(zubar.getZubarId());
+        }
+
+        // Uslov 3: Klijent
+        if (klijent != null && klijent.getKlijentId() != null && klijent.getKlijentId() > 0) {
+            sb.append(" AND u.id_klijent = ").append(klijent.getKlijentId());
+        }
+
+        // Uslov 4: Materijal
+        if (materijalZaPretragu != null && materijalZaPretragu.getMaterijalId() != null) {
+            sb.append(" AND u.id_usluga IN (SELECT id_usluga FROM stavka_usluge WHERE id_materijal = ")
+              .append(materijalZaPretragu.getMaterijalId()).append(")");
+        }
+
+        return sb.toString();
     }
+
 }

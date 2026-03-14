@@ -68,6 +68,7 @@ public class Klijent implements GenericEntity {
         return "klijent";
     }
 
+
     @Override
     public String getColumnNamesForInsert() {
         return "ime, prezime, kontakt, id_kategorija";
@@ -83,7 +84,7 @@ public class Klijent implements GenericEntity {
         this.klijentId = id;
     }
 
-    @Override
+   @Override
     public List<GenericEntity> getListFromResultSet(ResultSet rs) throws Exception {
 
         List<GenericEntity> lista = new ArrayList<>();
@@ -119,6 +120,7 @@ public class Klijent implements GenericEntity {
         return lista;
     }
 
+    
     @Override
     public String getPrimaryKeyColumnName() {
         return "id_klijent";

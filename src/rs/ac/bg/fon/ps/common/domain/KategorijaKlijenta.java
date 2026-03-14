@@ -98,4 +98,5 @@ public class KategorijaKlijenta implements GenericEntity {
     public String toString() {
         return naziv;
     }
+
 }

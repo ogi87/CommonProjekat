@@ -147,4 +147,5 @@ public class StavkaUsluge implements GenericEntity {
     public String toString() {
         return rb + ". " + materijal;
     }
+
 }

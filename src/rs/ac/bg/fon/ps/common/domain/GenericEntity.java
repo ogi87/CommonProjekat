@@ -21,4 +21,5 @@ public interface GenericEntity extends Serializable {
     Long getPrimaryKeyValue();
 
     String getUpdateSetClause();
+    
 }

@@ -41,4 +41,10 @@ public class Operations {
 
     public static final int SEARCH_KLIJENT = 30;
     public static final int SEARCH_USLUGA = 31;
+    
+    public static final int KREIRAJ_USLUGU = 32;
+    public static final int ZAPAMTI_USLUGU = 33;
+    
+    public static final int KREIRAJ_KLIJENTA = 34; // Stavi broj koji ti je slobodan
+    public static final int ZAPAMTI_KLIJENTA = 35;
 }

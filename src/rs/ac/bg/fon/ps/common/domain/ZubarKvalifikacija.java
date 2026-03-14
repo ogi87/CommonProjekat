@@ -113,4 +113,5 @@ public class ZubarKvalifikacija implements GenericEntity {
     public String getUpdateSetClause() {
         return "datum_sticanja='" + datumSticanja + "'";
     }
+
 }
