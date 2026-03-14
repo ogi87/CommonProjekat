@@ -142,6 +142,11 @@ public class StavkaUsluge implements GenericEntity {
                ", iznos=" + iznos +
                ", id_materijal=" + materijal.getMaterijalId();
     }
+    
+    @Override
+    public String getWhereCondition() {
+        return "id_usluga = " + usluga.getUslugaId() + " AND rb = " + rb;
+    }
 
     @Override
     public String toString() {

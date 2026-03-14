@@ -87,5 +87,10 @@ public class Kvalifikacija implements GenericEntity {
     public String toString() {
         return naziv;
     }
+    
+    @Override
+    public String getWhereCondition() {
+        return "id_kvalifikacija = " + kvalifikacijaId;
+    }
 
 }

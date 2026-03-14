@@ -143,4 +143,9 @@ public class Klijent implements GenericEntity {
     public String toString() {
         return ime + " " + prezime;
     }
+    
+    @Override
+    public String getWhereCondition() {
+        return "id_klijent = " + klijentId;
+    }
 }

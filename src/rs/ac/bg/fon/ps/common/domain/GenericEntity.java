@@ -22,4 +22,6 @@ public interface GenericEntity extends Serializable {
 
     String getUpdateSetClause();
     
+    String getWhereCondition();
+    
 }

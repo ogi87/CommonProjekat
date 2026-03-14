@@ -114,4 +114,9 @@ public class ZubarKvalifikacija implements GenericEntity {
         return "datum_sticanja='" + datumSticanja + "'";
     }
 
+    @Override
+    public String getWhereCondition() {
+        return "id_zubar = " + zubar.getZubarId() + " AND id_kvalifikacija = " + kvalifikacija.getKvalifikacijaId();
+    }
+
 }

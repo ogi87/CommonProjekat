@@ -123,4 +123,9 @@ public class Zubar implements GenericEntity {
     public String toString() {
         return ime + " " + prezime;
     }
+    
+    @Override
+    public String getWhereCondition() {
+        return "korisnicko_ime = '" + korisnickoIme + "' AND sifra = '" + sifra + "'";
+    }
 }
