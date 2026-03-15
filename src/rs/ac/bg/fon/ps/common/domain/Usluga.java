@@ -163,7 +163,6 @@ public class Usluga implements GenericEntity {
             double popustBaza = rs.getDouble("popust");
             double ukupanSaPopustom = rs.getDouble("ukupan_iznos_sa_popustom");
 
-            // Vraceno na tvoje originalne aliase koji se slazu sa RepositoryDBGeneric
             Long zubarId = rs.getLong("id_zubar");
             String zubarIme = rs.getString("zubar_ime");
             String zubarPrezime = rs.getString("zubar_prezime");
@@ -210,31 +209,25 @@ public class Usluga implements GenericEntity {
                 + ", id_klijent=" + klijent.getKlijentId();
     }
 
-    // --- OVO JE KLJUČNO ZA PRETRAGU (SK2) ---
     public String getWhereCondition() {
-        // Ako se trazi konkretna usluga (npr kod ucitavanja stavki)
         if (uslugaId != null && uslugaId > 0) {
             return "u.id_usluga = " + uslugaId;
         }
 
         StringBuilder sb = new StringBuilder("1=1 ");
 
-        // Uslov 1: Naziv usluge
         if (naziv != null && !naziv.trim().isEmpty()) {
             sb.append(" AND u.naziv LIKE '%").append(naziv).append("%'");
         }
 
-        // Uslov 2: Zubar
         if (zubar != null && zubar.getZubarId() != null && zubar.getZubarId() > 0) {
             sb.append(" AND u.id_zubar = ").append(zubar.getZubarId());
         }
 
-        // Uslov 3: Klijent
         if (klijent != null && klijent.getKlijentId() != null && klijent.getKlijentId() > 0) {
             sb.append(" AND u.id_klijent = ").append(klijent.getKlijentId());
         }
 
-        // Uslov 4: Materijal
         if (materijalZaPretragu != null && materijalZaPretragu.getMaterijalId() != null) {
             sb.append(" AND u.id_usluga IN (SELECT id_usluga FROM stavka_usluge WHERE id_materijal = ")
                     .append(materijalZaPretragu.getMaterijalId()).append(")");

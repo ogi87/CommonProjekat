@@ -161,12 +161,11 @@ public class Klijent implements GenericEntity {
 
     @Override
     public String getWhereCondition() {
-        // Ако имамо конкретан ID (нпр. код брисања или измене)
+        
         if (klijentId != null && klijentId > 0) {
             return "k.id_klijent = " + klijentId;
         }
         
-        // Ако претражујемо
         StringBuilder sb = new StringBuilder("1=1 ");
         
         if (ime != null && !ime.trim().isEmpty()) {

@@ -109,7 +109,7 @@ public class StavkaUsluge implements GenericEntity {
 
     @Override
     public void setId(Long id) {
-        // nema auto_increment ID
+        
     }
 
     @Override
